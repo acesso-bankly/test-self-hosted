@@ -26,26 +26,21 @@ data "aws_caller_identity" "current" {}
   }
 } */
 
-resource "aws_security_group" "security_group" {
-  name = "sec_group_github_runner"
+data "aws_security_group" "security_group" {
+    filter { 
+        name = "group-name"
+        values = ["github-actions-github-actions-runner-sg20221025200509814500000001"]
+    }
 
-  egress {
-    from_port   = 0
-    to_port     = 22
-    protocol    = "ssh"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+    filter {
+        name = "vpc-id"
+        values = ["vpc-00935567e29c67234"]
+    }
 }
 
+
 resource "aws_instance" "ultimate_github_runner" {
-  vpc_security_group_ids = [aws_security_group.security_group.id]
+  vpc_security_group_ids = [data.aws_security_group.security_group.id]
   ami                    = "ami-08c40ec9ead489470"
   instance_type          = "t2.micro" ## Free tier
   user_data              = templatefile("scripts/ec2.sh", { personal_access_token = var.personal_access_token })
