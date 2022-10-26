@@ -1,0 +1,11 @@
+on:
+  push:
+    branches:
+    - master
+    - develop
+jobs:
+  job1:
+    runs-on: self-hosted
+    steps:
+      - name: Hello
+        run: echo 'Hello World'
