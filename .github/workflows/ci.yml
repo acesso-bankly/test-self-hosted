@@ -4,7 +4,7 @@ on:
     - develop
 jobs:
   job1:
-    runs-on: terraform-aws-github-runner
+    runs-on: [self-hosted, terraform-aws-github-runner]
     steps:
       - name: Hello
         run: echo 'Hello'
